@@ -10,7 +10,7 @@ function generateRSS() {
   const rss = new RSS({
     feed_url: `${url}/rss.xml`,
     site_url: url,
-    title: "Blog | Alex Harri",
+    title: "Blog | MathHub",
     description:
       "Welcome to my personal website and blog. I write about TypeScript and other software engineering topics.",
     language: "en",
@@ -22,7 +22,7 @@ function generateRSS() {
       description: post.description,
       date: new Date(post.updatedAt || post.publishedAt).toUTCString(),
       url: `${url}/blog/${post.slug}`,
-      author: "Alex Harri Jónsson",
+      author: "MathHub Jónsson",
     });
   }
 

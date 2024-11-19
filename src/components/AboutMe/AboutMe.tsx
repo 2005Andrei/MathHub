@@ -11,7 +11,7 @@ export const AboutMe = () => {
         <img src="/images/me.png" className={s("image")} />
       </div>
       <div className={s("right")}>
-        <p>Hey, I'm Alex Harri.</p>
+        <p>Hey, I'm MathHub.</p>
         <p>
           I write about software engineering topics like TypeScript, monorepos, performance, and
           mathematics.

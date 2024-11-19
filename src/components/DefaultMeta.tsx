@@ -1,6 +1,6 @@
 import Head from "next/head";
 
-const title = "Personal website | Alex Harri Jónsson";
+const title = "Personal website | MathHub Jónsson";
 const description =
   "Welcome to my personal website and blog. I write about TypeScript and other software engineering topics.";
 

@@ -20,15 +20,15 @@ export const Layout = (props: Props) => {
         <div className={s("headerContent")}>
           <div className={s("headerSection")}>
             <Link href="/" className={s("link", { home: true })}>
-              Alex Harri
+              MathHub
             </Link>
           </div>
           <div className={s("headerSection")}>
             <Link href="/about" className={s("link")}>
-              About
+              Graphing
             </Link>
             <Link href="/blog" className={s("link")}>
-              Blog
+              Alte lectii
             </Link>
           </div>
         </div>

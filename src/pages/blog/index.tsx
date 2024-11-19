@@ -29,7 +29,7 @@ export default function Page(props: Props) {
   return (
     <Layout constrainWidth>
       <Head>
-        <title>Blog | Alex Harri Jónsson</title>
+        <title>Blog | MathHub Jónsson</title>
       </Head>
       <h1>All posts</h1>
 

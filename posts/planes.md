@@ -2,49 +2,34 @@
 title: "Planes in 3D space"
 description: "Visual and interactive introduction to 2D planes in 3D space."
 image: "/images/og-planes.png"
-publishedAt: "2024-04-27"
-tags: ["Mathematics", "C#", "Interactive"]
+publishedAt: "2024-11-19"
+tags: ["Algebra geometrica", "Interactiv", "Vectori"]
 ---
 
-A plane in 3D space can be thought of as a flat surface that stretches infinitely far, splitting space into two halves.
+Un plan in 3D poate fi vazut caa o suprafata infinita, impartind spatiul in dou jumatati.
 
 <Scene autoRotate scene="what-is-a-plane" height={480} yOffset={-0.5} zoom={1.2} angle={10} usesVariables />
 
-Planes have loads of uses in applications that deal with 3D geometry. I've mostly been working with them in the context of an [architectural modeler][arkio], where geometry is defined in terms of planes and their intersections.
 
-Learning about planes felt abstract and non-intuitive to me. _“Sure, that's a plane equation, but what do I do with it? What does a plane look like?”_ It took some time for me to build an intuition for how to reason about and work with them.
+## Descrierea planelor
 
-In writing this, I want to provide you with an introduction that focuses on building a practical, intuitive understanding of planes. I hope to achieve this through the use of visual (and interactive!) explanations which will accompany us as we work through progressively more complex problems.
+Sunt mai multe moduri de a defini un plan, precum:
 
-With that out of the way, let's get to it!
-
-## Describing planes
-
-There are many ways to describe planes, such as through
-
- 1. a point in 3D space and a normal,
- 2. three points in 3D space, forming a triangle, or
- 3. a normal and a distance from an origin.
+ 1. un punct in spatiu si o normala,
+ 2. trei puncte in spatiu, formand un triunghi, sau
+ 3. o normala si o distanta fata de un punct de origine.
 
 <Note>
-  Throughout this post, the term _normal_ will refer to a _normalized direction vector_ (unit vector) whose magnitude (length) is equal to 1, typically denoted by $\vec{n}$ where $\|\vec{n}\| = 1$.
+  In aceasta lectie, termenul _normala_ se va referi la vectorul _ortogonal suprafetei_, conventional notat cu $\vec{n}$.
 </Note>
 
-Starting with the point-and-normal case, here's an example of a plane described by a point in 3D space $p$ and a normal $\vec{n}$:
 
 <Scene scene="point-and-normal-with-plane" height={460} yOffset={-1.2} zoom={1.35} usesVariables />
 
-The normal $\vec{n}$ describes the plane's orientation, where the surface of the plane is perpendicular to $\vec{n}$, while the point $p$ describes _a_ point on the plane.
-
-We described this plane in terms of a single point $p$, but keep in mind that this plane—let's call it $P$—contains infinitely many points.
 
 <Scene scene="plane-intersecting-points" height={500} yOffset={-1} zoom={1.3} usesVariables />
 
-If $P$ were described by one of those other points contained by $P$, we would be describing the exact same plane. This is a result of the infinite nature of planes.
-
 This way of describing planes—in terms of a point and a normal—is the [point-normal form][point_normal_form] of planes.
-
-[point_normal_form]: https://en.wikipedia.org/wiki/Euclidean_planes_in_three-dimensional_space#Point%E2%80%93normal_form_and_general_form_of_the_equation_of_a_plane
 
 We can also describe a plane using three points in 3D space $a$, $b$, $c$ forming a triangle:
 
@@ -54,7 +39,6 @@ The triangle forms an implicit plane, but for us to be able to do anything usefu
 
 <Scene scene="three-points-normal-centered" height={420} zoom={1.4} yOffset={-0.8} autoRotate />
 
-<SmallNote label="" center>As mentioned earlier, the normal $\vec{n}$ describing a plane is a unit vector ($\|\vec{n}\|=1$) perpendicular to the plane.</SmallNote>
 
 We can use $b - a$ and $c - a$ as two edge vectors that are parallel to the plane's surface.
 
@@ -71,10 +55,6 @@ The [cross product][cross_product] takes in two vectors $\vec{a}$ and $\vec{b}$ 
 For example, given the vectors $\vec{i} = (1, 0, 0)$ and $\vec{j} = (0, 1, 0)$, their cross product is the vector $(0, 0, 1)$, which we'll label $\vec{k}$:
 
 <Scene scene="cross-product" height={370} zoom={1.7} yOffset={-0.0} autoRotate />
-
-<SmallNote label="" center>This explanation is simple on purpose. We'll get into more detail about the cross product later on.</SmallNote>
-
-Because the edge vectors of the triangle, $b - a$ and $c - a$, are both parallel to the triangle's surface, their cross product will be perpendicular to the triangle's surface. Let's name the cross product of our two edge vectors $\vec{d}$:
 
 <p className="mathblock">$$\vec{d} = (b - a) × (c - a)$$</p>
 
@@ -759,19 +739,18 @@ We'll redefine $\vec{U}$ to include $d_1$:
 
 <p className="mathblock">$$\vec{U} = (\vec{n_2} × \vec{n_3}) \times d_1$$</p>
 
-Our denominator, $D$, remains defined as :
+Numitorul, $D$, ramane definit astfel :
 
 <p className="mathblock">$$D = \vec{n_1} \cdot (\vec{n_2} × \vec{n_3})$$</p>
-
-With this, we find our point of intersection $P$ by adding $\vec{V}$ and $\vec{U}$ together and scaling them by $\dfrac{1}{D}$:
+gasim punctul de intersectia  $P$ prin a aduaga $\vec{V}$ si $\vec{U}$ impreuna si inmultind lungimea lor cu $\dfrac{1}{D}$:
 
 <p className="mathblock">$$P = \dfrac{\vec{V} + \vec{U}}{D}$$</p>
 
-Which fully expanded becomes:
+Care cand extindem devine:
 
 <p className="mathblock">$$P = \dfrac{(\vec{n_1} × ((\vec{n_2} \times d_3) - (\vec{n_3} \times d_2))) + ((\vec{n_2} × \vec{n_3}) \cdot d_1)}{\vec{n_1} \cdot (\vec{n_2} × \vec{n_3})}$$</p>
 
-Putting this into code, we get:
+Traducand aceasta in cod, am avea:
 
 ```cs
 Vector3 ThreePlaneIntersection(Plane P1, Plane P2, Plane P3) {
@@ -779,7 +758,7 @@ Vector3 ThreePlaneIntersection(Plane P1, Plane P2, Plane P3) {
   
   float denom = Vector3.Dot(u);
   if (Mathf.Abs(denom) < EPSILON) {
-    return null; // Planes do not intersect at a single point
+    return null; // Planele nu se intersecteaza in niciun punct
   }
 
   Vector3 a = P2.normal * P3.distance;
@@ -790,41 +769,3 @@ Vector3 ThreePlaneIntersection(Plane P1, Plane P2, Plane P3) {
   return (V + U) / denom;
 }
 ```
-
-
-## Parting words
-
-Thanks for reading!
-
-A whole lot of hours went into writing and building the visualizations for this post, so I hope it achieved its goal of helping you build an intuitive mental model of planes.
-
-Massive thanks goes to [Gunnlaugur Þór Briem][gthb_linkedin] and [Eiríkur Fannar Torfason][eirikur_dev] for providing invaluable feedback on this post. I worked with them at [GRID][grid]; they're fantastic people to work with and be around.
-
-[gthb_linkedin]: https://www.linkedin.com/in/gunnlaugur-briem/
-[eirikur_dev]: https://eirikur.dev/
-[grid]: https://grid.is/
-
-— Alex Harri
-
-<Note><p>PS: If you're interested in taking a look at how the visualizations in this post were built, this website is [open source on GitHub][website].</p></Note>
-
-[website]: https://github.com/alexharri/website
-
-
-<SectionAnchor id="further-reading">
-  <h2>Further reading</h2>
-</SectionAnchor>
-
-[further_reading]: #further-reading
-
-I highly recommend checking out [Real-Time Collision Detection by Christer Ericson][book_ref]. If you're building applications using 3D geometry, it will prove to be an incredibly useful resource. This post would not exist were it not for this book—especially the two chapters on the intersections of planes.
-
-[book_ref]: https://www.amazon.com/Real-Time-Collision-Detection-Interactive-Technology/dp/1558607323
-
-I recently analyzed the edit performance in [Arkio][arkio] and noticed that a method for solving three-plane intersections took around half of the total compute time when recalculating geometry. By implementing the more efficient method for three-plane intersections described in the book, we made the method __~500% faster__, increasing Arkio's edit performance by over __1.6x__. Crazy stuff!
-
-I started writing this post to understand how the three-plane intersection method worked. However, I felt that readers would need a better foundation and understanding of planes for this post to be of any value. In building that foundation, this post ended up quite a bit longer than I intended.
-
-[arkio]: https://www.arkio.is/
-
-Anyway, it's a great book. [Check it out][book_ref]!
