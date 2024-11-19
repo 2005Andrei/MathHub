@@ -29,30 +29,31 @@ Sunt mai multe moduri de a defini un plan, precum:
 
 <Scene scene="plane-intersecting-points" height={500} yOffset={-1} zoom={1.3} usesVariables />
 
-This way of describing planes—in terms of a point and a normal—is the [point-normal form][point_normal_form] of planes.
+Această metodă de descriere a planurilor — în termeni de un punct și o normală — este a planurilor.
 
-We can also describe a plane using three points in 3D space $a$, $b$, $c$ forming a triangle:
+Putem descrie un plan și folosind trei puncte în spațiul 3D $a$, $b$, $c$ care formează un triunghi:
 
 <Scene scene="three-points" height={440} zoom={1.4} yOffset={-0.8} autoRotate />
 
-The triangle forms an implicit plane, but for us to be able to do anything useful with the plane we'll need to calculate its normal $\vec{n}$. Once we've calculated the plane's normal, we can use that normal along with one of the triangle's three points to describe the plane in point-normal form.
+Triunghiul formează un plan implicit, dar pentru a putea face ceva util cu planul, va trebui să calculăm normala sa $\vec{n}$. Odată ce am calculat normala planului, putem folosi această normală împreună cu unul dintre cele trei puncte ale triunghiului pentru a descrie planul în forma punct-normal.
 
 <Scene scene="three-points-normal-centered" height={420} zoom={1.4} yOffset={-0.8} autoRotate />
 
 
-We can use $b - a$ and $c - a$ as two edge vectors that are parallel to the plane's surface.
+Putem folosi $b - a$ și $c - a$ ca doi vectori de muchie care sunt paraleli cu suprafața planului.
 
 <Scene scene="three-points-edge-vectors" height={400} zoom={1.4} yOffset={-0.8} autoRotate />
 
-By virtue of being parallel to the plane's surface, the vectors $b - a$ and $c - a$ are perpendicular to the plane's normal. This is where the cross product becomes useful to us.
+Prin faptul că sunt paraleli cu suprafața planului, vectorii $b - a$ și $c - a$ sunt perpendiculare pe normala planului. Aici produsul vectorial devine util pentru noi.
 
-The [cross product][cross_product] takes in two vectors $\vec{a}$ and $\vec{b}$ and returns a vector $\vec{c}$ that is perpendicular to both of them.
+
+Produsul [vectorial][cross_product] ia doi vectori $\vec{a}$ și $\vec{b}$ și returnează un vector $\vec{c}$ care este perpendicular pe amândoi.
 
 [cross_product]: https://en.wikipedia.org/wiki/Cross_product
 
 <p className="mathblock">$$\vec{c} = \vec{a} × \vec{b}$$</p>
 
-For example, given the vectors $\vec{i} = (1, 0, 0)$ and $\vec{j} = (0, 1, 0)$, their cross product is the vector $(0, 0, 1)$, which we'll label $\vec{k}$:
+De exemplu, având vectorii $\vec{i} = (1, 0, 0)$ și $\vec{j} = (0, 1, 0)$, produsul lor vectorial este vectorul $(0, 0, 1)$, pe care îl vom denumi $\vec{k}$:
 
 <Scene scene="cross-product" height={370} zoom={1.7} yOffset={-0.0} autoRotate />
 
@@ -60,52 +61,52 @@ For example, given the vectors $\vec{i} = (1, 0, 0)$ and $\vec{j} = (0, 1, 0)$, 
 
 <Scene scene="three-points-cross-product" height={440} zoom={1.4} yOffset={-0.8} autoRotate />
 
-<SmallNote label="" center>$\vec{d}$ has been scaled down for illustrative purposes</SmallNote>
+<SmallNote label="" center>$\vec{d}$ a fost redimensionat pentru scopuri ilustrative.</SmallNote>
 
-$\vec{d}$ points in the right direction, but it's not a normal. For $\vec{d}$ to be a normal, its magnitude needs to  equal 1. We can normalize $\vec{d}$ by dividing it by its magnitude, the result of which we'll assign to $\vec{n}$:
+$\vec{d}$ indică direcția corectă, dar nu este o normală. Pentru ca $\vec{d}$ să fie o normală, magnitudinea sa trebuie să fie egală cu 1. Putem normaliza $\vec{d}$ împărțindu-l la magnitudinea sa, rezultatul căruia îl vom atribui lui $\vec{n}$:
 
 <p className="mathblock">$$\vec{n} = \dfrac{\vec{d}}{\|\vec{d}\|}$$</p>
 
-This gives us a normal $\vec{n}$ where $\|\vec{n}\| = 1$:
+Aceasta ne dă o normală $\vec{n}$ unde $|\vec{n}| = 1$:
 
 <Scene scene="three-points-normal" height={420} zoom={1.4} yOffset={-0.8} autoRotate />
 
-Having found the triangle's normal $\vec{n}$ we can use it and any of the points $a$, $b$, $c$ to describe the plane containing the three points in point-normal form.
+După ce am găsit normală triunghiului $\vec{n}$, putem să o folosim împreună cu oricare dintre punctele $a$, $b$, $c$ pentru a descrie planul care conține cele trei puncte în forma punct-normal.
 
 <Scene scene="three-points-plane" height={460} zoom={1.1} yOffset={-1.6} autoRotate />
 
-It doesn't matter which of $a$, $b$, $c$ we use as the point in the point-normal form; we always get the same plane.
+Nu contează care dintre punctele $a$, $b$, $c$ folosim ca punct în forma punct-normal; vom obține întotdeauna același plan.
 
 
-### Constant-normal form
+### Forma cu normală constantă
 
-There's one more way to describe a plane that we'll look at, which is through a normal $\vec{n}$ and a distance $d$.
+Mai există încă o modalitate de a descrie un plan pe care o vom analiza, și anume printr-o normală $\vec{n}$ și o distanță $d$.
 
 <Scene scene="constant-normal-form" height={480} zoom={1.3} usesVariables />
 
-This is the _constant-normal form_ of planes. It makes lots of calculations using planes much simpler.
+Aceasta este _forma cu normală constantă_ a planurilor. Face mult mai simple multe calcule folosind planuri.
 
-In the constant-normal form, the distance $d$ denotes how close the plane gets to the origin. Thought of another way: multiplying the normal $\vec{n}$ by $d$ yields the point on the plane that's closest to the origin.
+În forma cu normală constantă, distanța $d$ indică cât de aproape ajunge planul de origine. Gândit altfel: înmulțind normală $\vec{n}$ cu $d$ se obține punctul de pe plan care este cel mai aproape de origine.
 
-<SmallNote label="">This is a simplification. More formally, given a point $P$ on a plane whose normal is $\vec{n}$, we can describe all points $X$ on the plane in two forms: the point-normal form $\vec{n} \cdot (X - P) = 0$, and the constant-normal form $\vec{n} \cdot X = d$ where $d = \vec{n} \cdot P$. See [further reading][further_reading].</SmallNote>
+<SmallNote label="">Aceasta este o simplificare. Mai formal, având un punct $P$ pe un plan al cărui normal este $\vec{n}$, putem descrie toate punctele $X$ de pe plan în două forme: forma punct-normal $\vec{n} \cdot (X - P) = 0$, și forma cu normală constantă $\vec{n} \cdot X = d$ unde $d = \vec{n} \cdot P$. Vezi [lecturi suplimentare][further_reading].</SmallNote>
 
-In getting a feel for the difference between the point-normal and constant-normal forms, take this example which describes the same plane in both forms:
+Pentru a înțelege diferența dintre formele punct-normal și cu normală constantă, ia acest exemplu care descrie același plan în ambele forme:
 
 <Scene scene="point-normal-and-constant-normal-form" height={460} zoom={1.4} usesVariables />
 
-The green arrow represents $d \times \vec{n}$ from the constant-normal form, while the blue point and arrow represent the point $p$ and normal $\vec{n}$ from the point-normal form.
+Săgeata verde reprezintă $d \times \vec{n}$ din forma cu normală constantă, în timp ce punctul albastru și săgeata reprezintă punctul $p$ și normală $\vec{n}$ din forma punct-normal.
 
-Translating from the point-normal to the constant-normal form is very easy: the distance $d$ is the [dot product][dot_product] of $\vec{n}$ and $p$.
+Tranzitarea de la forma punct-normal la forma cu normală constantă este foarte simplă: distanța $d$ este [produsul scalar][dot_product] dintre $\vec{n}$ și $p$.
 
 [dot_product]: https://en.wikipedia.org/wiki/Dot_product
 
 <p className="mathblock">$$ d = \vec{n} \cdot p $$</p>
 
-<SmallNote label="" center>If you're not familiar with the dot product, don't worry. We'll cover it later on.</SmallNote>
+<SmallNote label="" center>Dacă nu ești familiarizat cu produsul scalar, nu-ți face griji. Vom discuta despre acesta mai târziu.</SmallNote>
 
-<Note><p>The notation for $\vec{n}$ and $p$ might seem to indicate that they're of different types, but they're both vectors. I'm differentiating between points in space (e.g. $x$ and $y$) and direction vectors (e.g. $\vec{a}$ and $\vec{b}$) by using the arrow notation only for direction vectors.</p></Note>
+<Note><p>Notarea pentru $\vec{n}$ și $p$ ar putea părea că indică tipuri diferite, dar amândouă sunt vectori. Eu diferențiez între punctele din spațiu (de exemplu, $x$ și $y$) și vectorii de direcție (de exemplu, $\vec{a}$ și $\vec{b}$) folosind doar notarea cu săgeată pentru vectorii de direcție.</p></Note>
 
-The normal $\vec{n}$ stays the same across both forms.
+Normală $\vec{n}$ rămâne aceeași în ambele forme.
 
 
 ## Distance from plane
