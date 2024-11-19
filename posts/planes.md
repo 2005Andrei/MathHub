@@ -316,190 +316,192 @@ Vector3 RayPlaneIntersection(Line line, Plane plane) {
 }
 ```
 
-The $\vec{n_l} \cdot \vec{n_p} < \epsilon$ check covers both the _"line parallel to plane"_ case _and_ the case where the two normal vectors are at an obtuse angle.
+Verificarea $\vec{n_l} \cdot \vec{n_p} < \epsilon$ acoperă atât cazul "linie paralelă cu planul", cât și cazul în care cei doi vectori normali sunt la un unghi obtuz.
 
-<SmallNote>$\epsilon$ is the symbol for epsilon.</SmallNote>
+<SmallNote>$\epsilon$ este simbolul pentru epsilon.</SmallNote>
 
 
 
-## Plane-plane intersection
+## Intersecția planurilor
 
-The intersection of two planes forms an infinite line.
+Intersecția a două planuri formează o linie infinită.
 
 <Scene scene="intersecting-planes" height={500} yOffset={0.5} zoom={1.4} usesVariables />
 
-As a quick refresher: lines in 3D space are represented using a point $p$ and normal $\vec{n}$ where normal $\vec{n}$ describes the line's orientation, while the point $p$ describes a point which the line passes through.
+Ca o reîmprospătare rapidă: liniile în spațiul 3D sunt reprezentate folosind un punct $p$ și o normală $\vec{n}$, unde normală $\vec{n}$ descrie orientarea liniei, iar punctul $p$ descrie un punct prin care linia trece.
 
 <Scene scene="line" height={380} zoom={1.6} yOffset={-0.6} usesVariables />
 
-Let's take two planes $P_1$ and $P_2$ whose normals are $\vec{n_1}$ and $\vec{n_2}$.
+Să luăm două planuri $P_1$ și $P_2$, ale căror normale sunt $\vec{n_1}$ și $\vec{n_2}$.
 
-Finding the direction vector of $P_1$ and $P_2$'s intersection is deceptively simple. Since the line intersection of two planes lies on the surface of both planes, the line must be perpendicular to both plane normals, which means that the direction of the intersection is the cross product of the two plane normals. We'll assign it to $\vec{d}$.
+Găsirea vectorului direcției intersecției dintre planurile $P_1$ și $P_2$ este deceptiv de simplă. Deoarece linia de intersecție a două planuri se află pe suprafața ambelor planuri, linia trebuie să fie perpendiculară pe ambele normale ale planurilor, ceea ce înseamnă că direcția intersecției este produsul vectorial al celor două normale ale planurilor. O vom atribui lui $\vec{d}$.
 
 <p className="mathblock">$$\vec{d} = \vec{n_1} × \vec{n_2}$$</p>
 
-The magnitude of the cross product is equal to the [area of the parallelogram][area_parallelogram] formed by the two component vectors. This means that we can't expect the cross product to be a unit vector, so we'll normalize $\vec{d}$ and assign the normalized direction vector to $\vec{n}$.
+Magnitudinea produsului vectorial este egală cu [aria paralelogramului][area_parallelogram] format de cei doi vectori componenti. Asta înseamnă că nu putem aștepta ca produsul vectorial să fie un vector unitar, așa că vom normaliza $\vec{d}$ și vom atribui vectorul de direcție normalizat lui $\vec{n}$.
 
 [area_parallelogram]: https://en.wikipedia.org/wiki/Cross_product#/media/File:Cross_product_parallelogram.svg
 
 <p className="mathblock">$$\vec{n} = \dfrac{\vec{d}}{\|\vec{d}\|}$$</p>
 
-This gives us the intersection's normal $\vec{n}$. Let's zoom in and see this close up.
+Aceasta ne oferă normală intersecției $\vec{n}$. Haideți să facem un zoom și să vedem acest lucru de aproape.
 
 <Scene scene="intersecting-planes-point-and-normal" height={380} zoom={2} usesVariables />
 
-But this is only half of the puzzle! We'll also need to find a point in space to represent the line of intersection (i.e. a point which the line passes through). We'll take a look at how to do just that, right after we discuss the no-intersection case.
+Dar aceasta este doar jumătate din puzzle! Va trebui, de asemenea, să găsim un punct în spațiu pentru a reprezenta linia de intersecție (adică un punct prin care linia trece). Vom analiza cum să facem acest lucru, imediat după ce discutăm despre cazul fără intersecție.
 
 
-### Handling parallel planes
+### Gestionarea planurilor paralele
 
-Two planes whose normals are parallel will never intersect, which is a case that we'll have to handle.
+Două planuri ale căror normale sunt paralele nu se vor intersecta niciodată, ceea ce este un caz pe care va trebui să-l gestionăm.
 
 <Scene scene="parallel-planes" height={480} zoom={1.3} yOffset={-0.5} autoRotate />
 
-The cross product of two parallel normals is $(0, 0, 0)$. So if $\|\vec{n_1} × \vec{n_2}\| = 0$, the planes do not intersect.
 
-As previously mentioned, for many applications we'll want to treat planes that are _almost_ parallel as being parallel. This means that our plane-plane intersection procedure should yield a result of "no intersection" when the magnitude of $\vec{d}$ is less than some very small number called epsilon.
+Produsul vectorial al două normale paralele este $(0, 0, 0)$. Așadar, dacă $|\vec{n_1} × \vec{n_2}| = 0$, planurile nu se intersectează.
+
+După cum am menționat anterior, pentru multe aplicații vom dori să tratăm planurile care sunt aproape paralele ca fiind paralele. Aceasta înseamnă că procedura noastră de intersecție a planurilor ar trebui să returneze un rezultat de "fără intersecție" atunci când magnitudinea lui $\vec{d}$ este mai mică decât o valoare foarte mică numită epsilon.
 
 ```cs
 Line PlanePlaneIntersection(Plane P1, Plane P2) {
   Vector3 direction = Vector3.cross(P1.normal, P2.normal);
   if (direction.magnitude < EPSILON) {
-    return null; // Roughly parallel planes
+    return null; // Planuri aproximativ paralele
   }
   // ...
 }
 ```
+Dar care ar trebui să fie valoarea lui epsilon?
 
-But what should the value of epsilon be?
-
-Given two normals $\vec{n_1}$ and $\vec{n_2}$ where the angle between $\vec{n_1}$ and $\vec{n_2}$ is $\theta°$, we can find a reasonable epsilon by charting $\|\vec{n_1} × \vec{n_2}\|$ for different values of $\theta°$:
+Având două normale $\vec{n_1}$ și $\vec{n_2}$, unde unghiul dintre $\vec{n_1}$ și $\vec{n_2}$ este $\theta°$, putem găsi un epsilon rezonabil prin trasarea valorii $|\vec{n_1} \times \vec{n_2}|$ pentru diferite valori ale unghiului $\theta°$:
 
 <Image src="~/cross-product-magnitude-by-angle.png" plain width={840} />
 
-<SmallNote label="" center>Both of the axes are [logarithmic][log_chart].</SmallNote>
+<SmallNote label="" center>Ambele axe sunt [logaritmice][log_chart].</SmallNote>
 
 [log_chart]: https://en.wikipedia.org/wiki/Logarithmic_scale
 
-The relationship is linear: as the angle between the planes halves, so does the magnitude of the cross product of their normals. $\theta° = 1$ yields a magnitude of $0.01745$, and $\theta° = 0.5$ yields half of that.
 
-So to determine the epsilon, we can ask: how low does the angle in degrees need to become for us to consider two planes parallel? Given an angle $\theta°$, we can find the epsilon $\epsilon$ via:
+Relația este lineară: pe măsură ce unghiul dintre planuri se împarte la jumătate, la fel se reduce și magnitudinea produsului vectorial al normalelor lor. $\theta° = 1$ generează o magnitudine de $0.01745$, iar $\theta° = 0.5$ generează jumătate din aceasta.
+
+Așadar, pentru a determina epsilon, ne putem întreba: cât de mic trebuie să devină unghiul în grade pentru a considera două planuri paralele? Având un unghi $\theta°$, putem găsi epsilon $\epsilon$ prin:
 
 <p className="mathblock">$$\epsilon = 0.01745 \times \theta°$$</p>
 
-If that angle is 1/256°, then we get:
+Dacă unghiul este de 1/256°, atunci obținem:
 
 <p className="mathblock">$$\dfrac{0.01745}{256} \approx 0.000068 $$</p>
 
-With this you can determine the appropriate epsilon based on how small the angle between the planes needs to be for you to consider them parallel. That will depend on your use case.
+Cu aceasta, poți determina epsilon-ul corespunzător pe baza cât de mic trebuie să fie unghiul dintre planuri pentru a le considera paralele. Acest lucru va depinde de cazul tău de utilizare.
 
-### Finding a point of intersection
+### Găsirea unui punct de intersecție
 
-Having computed the normal and handled parallel planes, we can move on to finding a point $p$ along the line of intersection.
+După ce am calculat normală și am gestionat planurile paralele, putem trece la găsirea unui punct $p$ de-a lungul liniei de intersecție.
 
-Since the line describing a plane-plane intersection is infinite, there are infinitely many points we could choose as $p$.
+Deoarece linia care descrie intersecția a două planuri este infinită, există infinit de multe puncte pe care le-am putea alege ca $p$.
 
 <Scene scene="intersecting-planes-points" height={400} zoom={1.3} yOffset={0.5} usesVariables />
 
-We can narrow the problem down by taking the plane parallel to the two plane normals $\vec{n_1}$, $\vec{n_2}$ and observing that it intersects the line at a single point.
+Putem restrânge problema luând planul paralel cu cele două normale ale planurilor $\vec{n_1}$ și $\vec{n_2}$ și observând că acesta intersectează linia într-un singur punct.
 
 <Scene scene="intersecting-planes-virtual-plane" height={470} zoom={1.3} yOffset={-1} usesVariables />
 
-Since the point lies on the plane parallel to the two plane normals, we can find it by exclusively traveling along those normals.
+Deoarece punctul se află pe planul paralel cu cele două normale ale planurilor, îl putem găsi călătorind exclusiv de-a lungul acelor normale.
 
-The simplest case is the one where $P_1$ and $P_2$ are perpendicular. In that case, the solution is just $n_1 \times d_1 + n_2 \times d_2$. Here's what that looks like visually:
+Cazul cel mai simplu este cel în care $P_1$ și $P_2$ sunt perpendiculare. În acest caz, soluția este pur și simplu $n_1 \times d_1 + n_2 \times d_2$. Iată cum arată acest lucru vizual:
 
 <Scene scene="intersecting-planes-offset-2" height={470} yOffset={-0.5} usesVariables />
 
-When dragging the slider, notice how the tip of the parallelogram gets further away from the point of intersection as the planes become more parallel.
+Când mutați sliderul, observați cum vârful paralelogramului se îndepărtează de punctul de intersecție pe măsură ce planurile devin mai paralele.
 
-We can also observe that as we get further away from the point of intersection, the longer of the two vectors (colored red) pushes us further away from the point of intersection than the shorter (blue) vector does. This is easier to observe if we draw a line from the origin to the point of intersection:
+De asemenea, putem observa că pe măsură ce ne îndepărtăm de punctul de intersecție, vectorul mai lung (colorat în roșu) ne împinge mai departe de punctul de intersecție decât o face vectorul mai scurt (albastru). Acest lucru este mai ușor de observat dacă tragem o linie de la origine până la punctul de intersecție.
 
 <Scene scene="intersecting-planes-offset-4" height={470} yOffset={-0.5} usesVariables />
 
-Let's define $k_1$ and $k_2$ as the scaling factors that we apply to $\vec{n_1}$ and $\vec{n_2}$ (the result of which are the red and blue vectors). Right now we're using the distance components $d_1$ and $d_2$ of the planes as the scaling factors:
+Să definim $k_1$ și $k_2$ ca factori de scalare pe care îi aplicăm vectorilor $\vec{n_1}$ și $\vec{n_2}$ (rezultatul căror sunt vectorii roșii și albaștri). În acest moment, folosim componentele de distanță $d_1$ și $d_2$ ale planurilor ca factori de scalare:
 
 <p className="mathblock">$$ k_1 = d_1 $$<br />$$ k_2 = d_2 $$</p>
 
-To solve this asymmetric pushing effect, we need to travel less in the direction of the longer vector as the planes become more parallel. We need some sort of "pulling factor" that adjusts the vectors such that their tip stays on the line as the planes become parallel. 
+Pentru a rezolva acest efect de împingere asimetrică, trebuie să călătorim mai puțin în direcția vectorului mai lung pe măsură ce planurile devin mai paralele. Avem nevoie de un fel de "factor de atracție" care să ajusteze vectorii astfel încât vârful lor să rămână pe linie pe măsură ce planurile devin paralele.
 
-Here our friend the dot product comes in handy yet again. When the planes are perpendicular the dot product of $\vec{n_1}$ and $\vec{n_2}$ equals 0, but as the planes become increasingly parallel, it approaches 1. We can use this to gradually increase our yet-to-be-defined pulling factor.
+Aici, produsul scalar ne vine din nou în ajutor. Când planurile sunt perpendiculare, produsul scalar dintre $\vec{n_1}$ și $\vec{n_2}$ este 0, dar pe măsură ce planurile devin tot mai paralele, acesta se apropie de 1. Putem folosi acest lucru pentru a crește treptat factorul nostru de atracție, care urmează să fie definit.
 
 <p className="mathblock">$$ k_1 = d_1 + pull_1 \times (\vec{n_1} \cdot \vec{n_2}) $$<br />$$ k_2 = d_2 + pull_2 \times (\vec{n_1} \cdot \vec{n_2}) $$</p>
 
-Let's give the dot product $\vec{n_1} \cdot \vec{n_2}$ the name $dot$ to make this a bit less noisy:
+Să atribuim produsului scalar $\vec{n_1} \cdot \vec{n_2}$ numele de $dot$ pentru a face această formulă mai puțin încărcată:
 
 <p className="mathblock">$$ k_1 = d_1 + pull_1 \times dot $$<br />$$ k_2 = d_2 + pull_2 \times dot $$</p>
 
-The perfect pulling factors happen to be the distance components $d_1$ and $d_2$ used as counterweights against each other!
+Factorii de atracție perfecți se dovedesc a fi componentele de distanță $d_1$ și $d_2$, utilizate ca contragreutăți unul împotriva celuilalt!
 
 <p className="mathblock">$$ k_1 = d_1 - d_2 \times dot $$<br />$$ k_2 = d_2 - d_1 \times dot $$</p>
 
-Consider why this might be. When $\vec{n_1}$ and $\vec{n_2}$ are perpendicular, their dot product equals 0, which results in
+Gândiți-vă de ce acest lucru ar putea fi adevărat. Când $\vec{n_1}$ și $\vec{n_2}$ sunt perpendiculare, produsul lor scalar este 0, ceea ce duce la:
 
 <p className="mathblock">$$ k_1 = d_1 $$<br />$$ k_2 = d_2 $$</p>
 
-which we know yields the correct solution.
+Știm că aceasta duce la soluția corectă.
 
-In the case where $\vec{n_1}$ and $\vec{n_2}$ are parallel, their dot product equals 1, which results in:
+În cazul în care $\vec{n_1}$ și $\vec{n_2}$ sunt paralele, produsul lor scalar este 1, ceea ce duce la:
 
 <p className="mathblock">$$ k_1 = d_1 - d_2 $$<br />$$ k_2 = d_2 - d_1 $$</p>
 
-Because the absolute values of $d_1 - d_2$ and $d_2 - d_1$ are equal, it means that the magnitude of the two vectors—defined as $\vec{n_1} \times k_1$ and $\vec{n_2} \times k_2$—is equal:
+
+Pentru că valorile absolute ale lui $d_1 - d_2$ și $d_2 - d_1$ sunt egale, aceasta înseamnă că magnitudinea celor doi vectori — definiți ca $\vec{n_1} \times k_1$ și $\vec{n_2} \times k_2$ — este egală:
 
 <p className="mathblock">$$ \|\vec{n_1} \times k_1\| = \|\vec{n_2} \times k_2\| $$</p>
 
-This means that the magnitude of our vectors will become _more_ equal as the planes become parallel, which is what we want!
+Aceasta înseamnă că magnitudinea vectorilor noștri va deveni mai egală pe măsură ce planurile devin paralele, ceea ce este exact ceea ce ne dorim!
 
-Let's see this in action:
+Haideți să vedem acest lucru în acțiune:
 
 <Scene scene="intersecting-planes-offset-3" height={470} yOffset={-0.5} usesVariables />
 
-The vectors stay on the line, but they become increasingly too short as $\vec{n_1}$ and $\vec{n_2}$ become parallel.
+Vectorii rămân pe linie, dar devin din ce în ce mai scurți pe măsură ce $\vec{n_1}$ și $\vec{n_2}$ devin paralele.
 
-Yet again, we can use the dot product. Since we want the length of the vectors to increase as the planes become parallel, we can divide our scalars $k_1$ and $k_2$ by $1 - abs(dot)$ where $dot$ is the dot product of $\vec{n_1}$ and $\vec{n_2}$ and $abs(dot)$ is the absolute value of $dot$.
+Din nou, putem folosi produsul scalar. Deoarece dorim ca lungimea vectorilor să crească pe măsură ce planurile devin paralele, putem împărți scalarii $k_1$ și $k_2$ la $1 - \text{abs}(dot)$, unde $dot$ este produsul scalar dintre $\vec{n_1}$ și $\vec{n_2}$, iar $\text{abs}(dot)$ este valoarea absolută a lui $dot$.
 
 <p className="mathblock">$$ k_1 = (d_1 - d_2 \times dot) \,/\, (1 - abs(dot)) $$<br />$$ k_2 = (d_2 - d_1 \times dot) \,/\, (1 - abs(dot)) $$</p>
 
-The result of this looks like so:
+Rezultatul acestui lucru arată astfel:
 
 <Scene scene="intersecting-planes-offset-5" height={440} usesVariables />
 
-Using $1 - abs(dot)$ as the denominator certainly increases the size of the parallelogram, but by too much.
+Folosirea lui $1 - \text{abs}(dot)$ ca numitor mărește cu siguranță dimensiunea paralelogramului, dar prea mult.
 
-However, notice what happens when we visualize the quadrants of the parallelogram:
+Totuși, observați ce se întâmplă când vizualizăm cadranele paralelogramului:
 
 <Scene scene="intersecting-planes-offset-7" height={440} angle={25} usesVariables />
 
-As the planes become more parallel, the point of intersection approaches the center of the parallelogram.
+Pe măsură ce planurile devin mai paralele, punctul de intersecție se apropie de centrul paralelogramului.
 
-In understanding why that is, consider the effect that our denominator $1 - abs(dot)$ has on the area of the parallelogram. When $1 - abs(dot) = 0.5$, both of the vectors forming the parallelogram double in length, which has the effect of quadrupling the area of the parallelogram.
+Pentru a înțelege de ce se întâmplă acest lucru, să analizăm efectul pe care îl are numitorul nostru $1 - \text{abs}(dot)$ asupra ariei paralelogramului. Când $1 - \text{abs}(dot) = 0.5$, ambele dintre vectorii care formează paralelogramul își dublează lungimea, ceea ce are efectul de a înmulți aria paralelogramului cu patru.
 
 <Image src="~/area-of-parallelogram.svg" plain width={600} />
 
-This means that when we scale the component vectors of the parallelogram by
+Aceasta înseamnă că atunci când scalăm vectorii componenti ai paralelogramului cu
 
 <p className="mathblock">$$ \dfrac{1}{1 - abs(dot)} $$</p>
 
-it has the effect of scaling the area of the parallelogram by:
+Acest lucru are efectul de a scala aria paralelogramului cu:
 
 <p className="mathblock">$$ (\dfrac{1}{1 - abs(dot)})^2 $$</p>
 
-To instead scale the _area_ of the parallelogram by $1 \,/\, (1 - abs(dot))$, we need to square $dot$ in the denominator:
+Pentru a scala în schimb aria paralelogramului cu $1 ,/, (1 - \text{abs}(dot))$, trebuie să ridicăm la pătrat valoarea lui $dot$ în numitor:
 
 <p className="mathblock">$$ \dfrac{1}{1 - dot^2} $$</p>
 
-<SmallNote label="" center>Squaring allows us to remove $abs()$ because the square of a negative number is positive.</SmallNote>
+<SmallNote label="" center>Ridicarea la pătrat ne permite să eliminăm $abs()$ deoarece pătratul unui număr negativ este pozitiv.</SmallNote>
 
-With this, our scalars $k_1$ and $k_2$ become
+Cu aceasta, scalarii noștri $k_1$ și $k_2$ devin:
 
 <p className="mathblock">$$ k_1 = (d_1 - d_2 \times dot) \,/\, (1 - dot^2) $$<br />$$ k_2 = (d_2 - d_1 \times dot) \,/\, (1 - dot^2) $$</p>
 
-which scales the parallelogram such that its tip lies at the point of intersection:
+Aceasta scalează paralelogramul astfel încât vârful său să se afle exact la punctul de intersecție:
 
 <Scene scene="intersecting-planes-offset-6" height={400} yOffset={-1} usesVariables />
 
-Putting all of this into code, we get:
+Punând toate acestea în cod, obținem:
 
 ```cs
 float dot = Vector3.Dot(P1.normal, P2.normal);
