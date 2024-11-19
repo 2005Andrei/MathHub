@@ -109,68 +109,68 @@ Tranzitarea de la forma punct-normal la forma cu normală constantă este foarte
 Normală $\vec{n}$ rămâne aceeași în ambele forme.
 
 
-## Distance from plane
+## Distanța față de plan
 
-Given an arbitrary point $x$ and a plane $P$ in constant-normal form, we may want to ask how far away the point is from the plane. In other words, what is the minimum distance $x$ needs to travel to lie on the plane?
+Având un punct oarecare $x$ și un plan $P$ în forma cu normală constantă, am putea dori să aflăm cât de departe este punctul de plan. Cu alte cuvinte, care este distanța minimă pe care trebuie să o parcurgă punctul $x$ pentru a ajunge pe plan?
 
 <Scene scene="point-and-plane" height={440} zoom={1.3} yOffset={-0.5} autoRotate />
 
-We can frame this differently if we construct a plane $P_x$ containing $x$ that is parallel to $P$, which we can do in point-normal form using $x$ as the point and $P$'s normal $\vec{n}$ as the normal:
+Putem reformula problema diferit, construind un plan $P_x$ care conține punctul $x$ și care este paralel cu planul $P$. Acest lucru îl putem face în forma punct-normal folosind $x$ ca punct și normală planului $P$ ($\vec{n}$) ca normală:
 
 <Scene scene="point-distance-step-1" height={440} zoom={1.3} yOffset={-0.5} autoRotate />
 
-With two parallel planes, we can frame the problem as finding the distance between the two planes. This becomes trivial using their constant-normal form since it allows us to take the difference between their distance components $d_1$ and $d_2$.
+Având două planuri paralele, putem reformula problema ca fiind găsirea distanței dintre cele două planuri. Aceasta devine trivială folosind forma lor cu normală constantă, deoarece ne permite să luăm diferența dintre componentele lor de distanță $d_1$ și $d_2$.
 
-So let's find $P_x$'s distance using the $d = \vec{n} \cdot p$ equation we learned about:
+Așadar, să găsim distanța planului $P_x$ folosind ecuația $d = \vec{n} \cdot p$ despre care am învățat:
 
 <Scene scene="point-distance-step-2" height={440} zoom={1.3} yOffset={-0.5} autoRotate />
 
-With two distances $d_1$ and $d_2$ from the planes $P$ and $P_x$ the solution simply becomes:
+Cu două distanțe $d_1$ și $d_2$ de la planurile $P$ și $P_x$, soluția devine simplă:
 
 <p className="mathblock">$$ d_1 - d_2 $$</p>
 
 <Scene scene="point-distance-step-3" height={440} zoom={1.3} yOffset={-0.5} autoRotate />
 
-So, to simplify, given a plane $P$ having a normal $\vec{n}$ and distance $d$, we can calculate a point $x$'s distance from $P$ like so:
+Așadar, pentru a simplifica, având un plan $P$ cu normală $\vec{n}$ și distanță $d$, putem calcula distanța unui punct $x$ față de planul $P$ astfel:
 
 <p className="mathblock">$$ d - (\vec{n} \cdot x) $$</p>
 
-The distance may be positive or negative depending on which side of the plane the point is on.
+Distanța poate fi pozitivă sau negativă, în funcție de ce parte a planului se află punctul.
 
 
-### Projecting a point onto a plane
+### Proiectarea unui punct pe un plan
 
-A case where calculating a point's distance from a plane becomes useful is, for example, if you want to project a point onto a plane.
+Un caz în care calcularea distanței unui punct față de un plan devine utilă este, de exemplu, atunci când dorești să proiectezi un punct pe un plan.
 
-Given a point $x$ which we want to project onto plane $P$ whose normal is $\vec{n}$ and distance is $d$, we can do that fairly easily. First, let's define $D$ as the point's distance from the plane:
+Având un punct $x$ pe care dorim să îl proiectăm pe planul $P$, al cărui normală este $\vec{n}$ și distanță este $d$, putem face acest lucru destul de ușor. Mai întâi, să definim $D$ ca distanța punctului față de plan:
 
 <p className="mathblock">$$ D = d - (\vec{n} \cdot x) $$</p>
 
-Multiplying the plane's normal $\vec{n}$ by $D$ gives us a vector which when added to $x$ projects it onto the plane. Let's call the projected point $S$:
+Înmulțind normală planului $\vec{n}$ cu $D$, obținem un vector care, atunci când este adăugat la $x$, proiectează punctul pe plan. Vom numi punctul proiectat $S$:
 
 <p className="mathblock">$$ S = x + (\vec{n} \times D) $$</p>
 
 <Scene scene="project-point-onto-plane-along-normal" height={440} zoom={1.3} yOffset={-0.5} autoRotate />
 
-The projection occurs along the plane's normal, which is sometimes useful. However, it is much more useful to be able to project a point onto a plane along an _arbitrary_ direction instead. Doing that boils down finding the point of intersection of a line and a plane.
+Proiecția are loc de-a lungul normalelor planului, ceea ce este uneori util. Cu toate acestea, este mult mai util să poți proiecta un punct pe un plan de-a lungul unei direcții _arbitrare_ în schimb. A face acest lucru presupune găsirea punctului de intersecție dintre o linie și un plan.
 
-## Line-plane intersection
+### Intersecția linie-plan
 
-We can describe lines in 3D space using a point $p$ and normal $\vec{n}$. The normal $\vec{n}$ describes the line's orientation, while the point $p$ describes a point which the line passes through.
+Putem descrie linii în spațiul 3D folosind un punct $p$ și o normală $\vec{n}$. Normală $\vec{n}$ descrie orientarea liniei, iar punctul $p$ reprezintă un punct prin care linia trece.
 
 <Scene scene="line" height={380} zoom={1.6} yOffset={-0.6} usesVariables />
 
-In this chapter, the line will be composed of the point $p_l$ and normal $\vec{n_l}$, while the plane—given in constant-normal form—has a normal $\vec{n_p}$ and a distance $d_p$.
+În acest capitol, linia va fi compusă din punctul $p_l$ și normală $\vec{n_l}$, în timp ce planul—dat în forma constant-normală—are o normală $\vec{n_p}$ și o distanță $d_p$.
 
 <Scene scene="project-point-onto-plane" height={420} yOffset={-1} zoom={1.5} usesVariables />
 
-Our goal will be to find a distance $D$ that $p_l$ needs to travel along $\vec{n_l}$ such that it lies on the plane.
+Scopul nostru va fi să găsim o distanță $D$ pe care punctul $p_l$ trebuie să o parcurgă de-a lungul normalăi $\vec{n_l}$ astfel încât să ajungă pe plan.
 
-We can figure out the distance $D_p$ that we'd need to travel if $\vec{n_l}$ and $\vec{n_p}$ were parallel, which is what we did when projecting along the plane's normal.
+Putem determina distanța $D_p$ pe care ar trebui să o parcurgem dacă $\vec{n_l}$ și $\vec{n_p}$ ar fi paralele, ceea ce am făcut atunci când proiectam de-a lungul normalăi planului.
 
 <p className="mathblock">$$ D_p = d_p - (\vec{n_p} \cdot p_l) $$</p>
 
-Let's try projecting $p_l$ along $\vec{n_l}$ using $D_p$ as a scalar like so:
+Să încercăm să proiectăm punctul $p_l$ de-a lungul normalăi $\vec{n_l}$ folosind $D_p$ ca scalare, astfel:
 
 <p className="mathblock">$$ P = p_l + \vec{n_l} \times D_p $$</p>
 
