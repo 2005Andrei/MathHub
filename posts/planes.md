@@ -513,9 +513,9 @@ float k2 = (P2.distance - P1.distance * dot) / denom;
 Vector3 point = P1.normal * k1 + P2.normal * k2;
 ```
 
-<SmallNote label="" center>Based on code from [Real-Time Collision Detection by Christer Ericson][further_reading]</SmallNote>
+<SmallNote label="" center>Pe baza codului din [Real-Time Collision Detection by Christer Ericson][further_reading]</SmallNote>
 
-Which through some mathematical magic can be optimized down to:
+Care, printr-o magie matematică, poate fi optimizat la:
 
 ```cs
 Vector3 direction = Vector3.cross(P1.normal, P2.normal);
@@ -526,15 +526,15 @@ Vector3 b = P2.distance * P1.normal;
 Vector3 point = Vector3.Cross(a - b, direction) / denom;
 ```
 
-<SmallNote label="" center>How this optimization works can be found in chapter 5.4.4 of [Real-Time Collision Detection by Christer Ericson][further_reading].</SmallNote>
+<SmallNote label="" center>Cum funcționează această optimizare poate fi găsit în capitolul 5.4.4 din [Real-Time Collision Detection by Christer Ericson][further_reading].</SmallNote>
 
-This completes our plane-plane intersection implementation:
+Aceasta completează implementarea noastră de intersecție plan-plan:
 
 ```cs
 Line PlanePlaneIntersection(Plane P1, Plane P2) {
   Vector3 direction = Vector3.cross(P1.normal, P2.normal);
   if (direction.magnitude < EPSILON) {
-    return null; // Roughly parallel planes
+    return null; //Planuri aproximativ paralele
   }
 
   float denom = Vector3.Dot(direction, direction);
@@ -548,119 +548,119 @@ Line PlanePlaneIntersection(Plane P1, Plane P2) {
 }
 ```
 
-By the way, an interesting property of only traveling along the plane normals is that it yields the point on the line of intersection that is closest to the origin. Cool stuff!
+Apropo, o proprietate interesantă a călătoriei doar pe normalele planului este că aceasta duce la punctul de pe linia de intersecție care este cel mai apropiat de origine. Foarte tare!
 
 
-## Three plane intersection
+## Intersecția a trei planuri
 
-Given three planes $P_1$, $P_2$, $P_3$, there are five possible configurations in which they intersect or don't intersect:
+Având trei planuri $P_1$, $P_2$, $P_3$, există cinci configurații posibile în care acestea pot interseca sau nu:
 
- 1. All three planes are parallel, with none of them intersecting each other.
- 2. Two of the planes are parallel, and the third plane intersects the other two.
- 3. All three planes intersect along a single line.
- 4. The three planes intersect each other in pairs, forming three parallel lines of intersection.
- 5. All three planes intersect each other at a single point.
+1. Toate cele trei planuri sunt paralele, fără ca vreunul dintre ele să intersecționeze celelalte.
+2. Două dintre planuri sunt paralele, iar al treilea plan intersectează cele două planuri paralele.
+3. Toate cele trei planuri se intersectează pe o singură linie.
+4. Cele trei planuri se intersectează fiecare în pereche, formând trei linii paralele de intersecție.
+5. Toate cele trei planuri se intersectează între ele într-un singur punct.
 
 <Scene scene="three-plane-intersection-configurations" height={400} yOffset={-1} zoom={1.1} usesVariables />
 
-When finding the point of intersection, we'll first need to determine whether all three planes intersect at a single point—which for configurations 1 through 4, they don't.
+Când căutăm punctul de intersecție, va trebui mai întâi să determinăm dacă toate cele trei planuri se intersectează într-un singur punct—ceea ce pentru configurațiile 1 până la 4 nu se întâmplă.
 
-Given $\vec{n_1}$, $\vec{n_2}$, $\vec{n_3}$ as the plane normals for $P_1$, $P_2$, $P_3$, we can determine whether the planes intersect at a single point with the formula:
+Având $\vec{n_1}$, $\vec{n_2}$, $\vec{n_3}$ ca normalele planurilor pentru $P_1$, $P_2$, $P_3$, putem determina dacă planurile se intersectează într-un singur punct folosind formula:
 
 <p className="mathblock">$$ \vec{n_1} \cdot (\vec{n_2} × \vec{n_3}) \neq 0 $$</p>
 
-When I first saw this, I found it hard to believe this would work for all cases. Still, it does! Let's take a deep dive to better understand what's happening.
+Când am văzut asta pentru prima dată, mi s-a părut greu de crezut că va funcționa în toate cazurile. Totuși, funcționează! Haideți să analizăm în detaliu pentru a înțelege mai bine ce se întâmplă.
 
-### Two or more planes are parallel
+### Două sau mai multe plane sunt paralele
 
-We'll start with the configurations where two or more planes are parallel:
+Vom începe cu configurațiile în care două sau mai multe plane sunt paralele:
 
 <Scene scene="three-planes-some-parallel" height={400} autoRotate />
 
-If $\vec{n_2}$ and $\vec{n_3}$ are parallel then $\vec{n_2} × \vec{n_3}$ is a vector whose magnitude is zero.
+Dacă $\vec{n_2}$ și $\vec{n_3}$ sunt paralele, atunci $\vec{n_2} \times \vec{n_3}$ este un vector a cărui magnitudine este zero.
 
 <p className="mathblock">$$\|\vec{n_2} × \vec{n_3}\| = 0$$</p>
 
-And since the dot product is a multiple of the magnitudes of its component vectors:
+Și deoarece produsul scalar este un multiplu al magnitudinilor vectorilor săi componenti:
 
 <p className="mathblock">$$a \cdot b = \|a\|\,\|b\|\,\cos\theta$$</p>
 
-the final result is zero whenever $\vec{n_2}$ and $\vec{n_3}$ are parallel.
+Rezultatul final este zero ori de câte ori $\vec{n_2}$ și $\vec{n_3}$ sunt paralele.
 
 <p className="mathblock">$$\vec{n_1} \cdot (\vec{n_2} × \vec{n_3}) = 0$$</p>
 
-This takes care of the "all-planes-parallel" configuration, and the configuration where $\vec{n_2}$ and $\vec{n_3}$ are parallel
+Aceasta se ocupă de configurația "toate planele paralele" și de configurația în care $\vec{n_2}$ și $\vec{n_3}$ sunt paralele.
 
 <Scene scene="three-planes-n2-n3-parallel" height={440} zoom={1.4} xRotation={-20} autoRotate />
 
-With that, let's consider the case where $\vec{n_1}$ is parallel to either $\vec{n_2}$ or $\vec{n_3}$ but $\vec{n_2}$ and $\vec{n_3}$ are not parallel to each other.
+Cu aceasta, să considerăm cazul în care $\vec{n_1}$ este paralel cu fie $\vec{n_2}$, fie $\vec{n_3}$, dar $\vec{n_2}$ și $\vec{n_3}$ nu sunt paralele între ele.
 
-Let's take the specific case where $\vec{n_1}$ is parallel to $\vec{n_2}$ but $\vec{n_3}$ is parallel to neither.
+Să luăm cazul specific în care $\vec{n_1}$ este paralel cu $\vec{n_2}$, dar $\vec{n_3}$ nu este paralel cu niciunul dintre ele.
 
 <Scene scene="three-planes-n1-n2-parallel" height={440} zoom={1.4} xRotation={-20} autoRotate />
 
-Here the cross product $\vec{n_2} × \vec{n_3}$ is a vector (colored red) that's perpendicular to both $\vec{n_2}$ and $\vec{n_3}$.
+Aici, produsul vectorial $\vec{n_2} \times \vec{n_3}$ este un vector (colorat în roșu) care este perpendicular pe ambele $\vec{n_2}$ și $\vec{n_3}$.
 
 <Scene scene="three-planes-n1-n2-parallel-cross" height={440} zoom={1.4} xRotation={-20} autoRotate />
 
-Since $\vec{n_1}$ is parallel to $\vec{n_2}$, that means that $\vec{n_2} × \vec{n_3}$ is also perpendicular to $\vec{n_1}$. As we've learned, the dot product of two perpendicular vectors is zero, meaning that:
+Cum $\vec{n_1}$ este paralel cu $\vec{n_2}$, acest lucru înseamnă că $\vec{n_2} \times \vec{n_3}$ este de asemenea perpendicular pe $\vec{n_1}$. Așa cum am învățat, produsul scalar al două vectori perpendiculare este zero, ceea ce înseamnă că:
 
 <p className="mathblock">$$\vec{n_1} \cdot (\vec{n_2} × \vec{n_3}) = 0$$</p>
 
-This also holds in the case where $\vec{n_1}$ is parallel to $\vec{n_3}$ instead of $\vec{n_2}$.
+Acest lucru este valabil și în cazul în care $\vec{n_1}$ este paralel cu $\vec{n_3}$ în loc de $\vec{n_2}$.
 
-### Parallel lines of intersection
+### Linii de intersecție paralele
 
-We've demonstrated that two of the three normals being parallel results in $\vec{n_1} \cdot (\vec{n_2} × \vec{n_3}) = 0$. But what about the configurations where the three planes intersect along parallel lines? Those configurations have no parallel normals.
+Am demonstrat că două dintre cele trei normale paralele duc la $\vec{n_1} \cdot (\vec{n_2} \times \vec{n_3}) = 0$. Dar ce se întâmplă în configurațiile în care cele trei plane se intersectează de-a lungul unor linii paralele? Aceste configurații nu au normale paralele.
 
 <Scene scene="three-planes-three-lines" height={430} zoom={1.2} yOffset={0.5} autoRotate />
 
-As we learned when looking at plane-plane intersections, the cross product of two plane normals gives us the direction vector of the planes' line of intersection.
+Așa cum am învățat atunci când am analizat intersecțiile plane-plane, produsul vectorial al două normale de plane ne oferă vectorul direcției liniei de intersecție a planelelor.
 
 <Scene scene="three-planes-three-lines-cross" height={460} zoom={1.4} autoRotate />
 
-When all of the lines of intersection are parallel, all of the plane normals defining those lines are perpendicular to them.
+Atunci când toate liniile de intersecție sunt paralele, toate normalele planelelor care definesc aceste linii sunt perpendiculare pe ele.
 
-Yet again, because the dot product of perpendicular vectors is 0 we can conclude that $\vec{n_1} \cdot (\vec{n_2} × \vec{n_3}) = 0$ for these configurations as well.
+Din nou, deoarece produsul scalar al vectorilor perpendiculare este 0, putem concluziona că $\vec{n_1} \cdot (\vec{n_2} \times \vec{n_3}) = 0$ și pentru aceste configurații.
 
-We can now begin our implementation. As usual, we'll use an epsilon to handle the _"roughly parallel"_ case:
+Acum putem începe implementarea. Ca de obicei, vom folosi un epsilon pentru a gestiona cazul "aproape paralel":
 
 ```cs
 Vector3 ThreePlaneIntersection(Plane P1, Plane P2, Plane P3) {
   Vector3 cross = Vector3.Cross(P2.normal, P3.normal);
   float dot = Vector3.Dot(P1.normal, cross);
   if (Mathf.Abs(dot) < EPSILON) {
-    return null; // Planes do not intersect at a single point
+    return null; // Planele nu se intersectează într-un singur punct.
   }
   // ...
 }
 ```
 
-## Computing the point intersection
+## Calcularea punctului de intersecție.
 
-We want to find the point at which our three planes $P_1$, $P_2$, $P_3$ intersect:
+Dorim să găsim punctul în care cele trei plane $P_1$, $P_2$, $P_3$ se intersectează:
 
 <Scene scene="three-intersecting-planes-point" height={520} zoom={1.25} yOffset={-1} xRotation={-17} autoRotate />
 
-Some of what we learned about two-plane intersections will come into play here. Let's start by taking the line of intersection for $P_2$ and $P_3$ and varying the position of $P_1$. You'll notice that the point of intersection is the point at which $P_1$ intersects the line.
+Unele dintre lucrurile pe care le-am învățat despre intersecțiile a două plane vor fi aplicate și aici. Să începem prin a lua linia de intersecție pentru $P_2$ și $P_3$ și să variem poziția lui $P_1$. Veți observa că punctul de intersecție este punctul în care $P_1$ intersectează linia.
 
 <Scene scene="three-intersecting-planes" height={450} zoom={1.25} yOffset={-0.5} xRotation={-17} usesVariables />
 
-When $P_1$'s distance from the origin is 0, the vector pointing from the origin to the point of intersection is parallel to $P_1$ (and perpendicular to $P_1$'s normal).
+Când distanța lui $P_1$ față de origine este 0, vectorul care indică de la origine către punctul de intersecție este paralel cu $P_1$ (și perpendicular pe normalul lui $P_1$).
 
 <Scene scene="three-intersecting-planes-10" height={450} zoom={1.25} yOffset={-0.5} xRotation={45} autoRotate />
 
-This vector—let's call it $\vec{V}$—will play a large role in computing the point of intersection.
+Acest vector—să-l numim $\vec{V}$—va juca un rol important în calcularea punctului de intersecție.
 
-We can find $\vec{V}$ through the cross product of two other vectors $\vec{v_1}$, $\vec{v_2}$. The first of those, $\vec{v_1}$, is just $P_1$'s normal.
+Putem găsi $\vec{V}$ prin produsul vectorial al altor două vectori, $\vec{v_1}$ și $\vec{v_2}$. Primul dintre aceștia, $\vec{v_1}$, este chiar normalul lui $P_1$.
 
 <p className="mathblock">$$\vec{v_1} = \vec{n_1}$$</p>
 
-The latter vector can be found via the equation
+Cel de-al doilea vector poate fi găsit prin ecuația:
 
 <p className="mathblock">$$\vec{v_2} = \vec{n_2} \times d_3 - \vec{n_3} \times d_2$$</p>
 
-where $d_2$ and $d_3$ are the distances in the constant-normal form of planes $P_2$ and $P_3$.
+unde $d_2$ și $d_3$ sunt distanțele în forma constantă-normală ale planelelor $P_2$ și $P_3$.
 
 With $\vec{v_1}$ and $\vec{v_2}$ defined, we assign their cross product to $\vec{V}$:
 
@@ -745,18 +745,19 @@ We'll redefine $\vec{U}$ to include $d_1$:
 
 <p className="mathblock">$$\vec{U} = (\vec{n_2} × \vec{n_3}) \times d_1$$</p>
 
-Numitorul, $D$, ramane definit astfel :
+Our denominator, $D$, remains defined as :
 
 <p className="mathblock">$$D = \vec{n_1} \cdot (\vec{n_2} × \vec{n_3})$$</p>
-gasim punctul de intersectia  $P$ prin a aduaga $\vec{V}$ si $\vec{U}$ impreuna si inmultind lungimea lor cu $\dfrac{1}{D}$:
+
+With this, we find our point of intersection $P$ by adding $\vec{V}$ and $\vec{U}$ together and scaling them by $\dfrac{1}{D}$:
 
 <p className="mathblock">$$P = \dfrac{\vec{V} + \vec{U}}{D}$$</p>
 
-Care cand extindem devine:
+Which fully expanded becomes:
 
 <p className="mathblock">$$P = \dfrac{(\vec{n_1} × ((\vec{n_2} \times d_3) - (\vec{n_3} \times d_2))) + ((\vec{n_2} × \vec{n_3}) \cdot d_1)}{\vec{n_1} \cdot (\vec{n_2} × \vec{n_3})}$$</p>
 
-Traducand aceasta in cod, am avea:
+Putting this into code, we get:
 
 ```cs
 Vector3 ThreePlaneIntersection(Plane P1, Plane P2, Plane P3) {
@@ -764,7 +765,7 @@ Vector3 ThreePlaneIntersection(Plane P1, Plane P2, Plane P3) {
   
   float denom = Vector3.Dot(u);
   if (Mathf.Abs(denom) < EPSILON) {
-    return null; // Planele nu se intersecteaza in niciun punct
+    return null; // Planes do not intersect at a single point
   }
 
   Vector3 a = P2.normal * P3.distance;
