@@ -174,45 +174,47 @@ Să încercăm să proiectăm punctul $p_l$ de-a lungul normalăi $\vec{n_l}$ fo
 
 <p className="mathblock">$$ P = p_l + \vec{n_l} \times D_p $$</p>
 
-We'll visualize $P$ as a red point:
+Vom vizualiza punctul $P$ ca un punct roșu:
 
 <Scene scene="project-point-onto-plane-2" height={450} yOffset={-1} zoom={1.5} usesVariables />
 
-As $\vec{n_l}$ and $\vec{n_p}$ become parallel, $D_p$ gets us closer and closer to the correct solution. However, as the angle between $\vec{n_l}$ and $\vec{n_p}$ increases, $D_p$ becomes increasingly too small.
+Pe măsură ce $\vec{n_l}$ și $\vec{n_p}$ devin paralele, $D_p$ ne aduce tot mai aproape de soluția corectă. Totuși, pe măsură ce unghiul dintre $\vec{n_l}$ și $\vec{n_p}$ crește, $D_p$ devine tot mai mic și eronat.
 
-Here, the dot product comes in handy. For two vectors $\vec{a}$ and $\vec{b}$, the dot product is defined as
+Aici intervine produsul scalar. Pentru două vectori $\vec{a}$ și $\vec{b}$, produsul scalar este definit ca
 
 <p className="mathblock">$$\vec{a} \cdot \vec{b} = \|\vec{a}\|\,\|\vec{b}\|\,\cos\theta$$</p>
 
-where $\theta$ is the angle between $\vec{a}$ and $\vec{b}$.
 
-Consider the dot product of $\vec{n_l}$ and $\vec{n_p}$. Since both normals are unit vectors whose magnitudes are 1
+unde $\theta$ este unghiul dintre $\vec{a}$ și $\vec{b}$.
+
+Să considerăm produsul scalar dintre $\vec{n_l}$ și $\vec{n_p}$. Deoarece ambele normale sunt vectori unitate ale căror magnitudini sunt 1
 
 <p className="mathblock">$$\|\vec{n_l}\| = \|\vec{n_p}\| = 1$$</p>
 
-we can remove their magnitudes from the equation,
+putem elimina magnitudinile lor din ecuație,
 
 <p className="mathblock">$$\vec{n_l} \cdot \vec{n_p} = \cos\theta$$</p>
 
-making the dot product of $\vec{n_l}$ and $\vec{n_p}$ the cosine of the angle between them.
 
-For two vectors, the cosine of their angles approaches 1 as the vectors become increasingly parallel, and approaches 0 as they become perpendicular.
+făcând produsul scalar dintre $\vec{n_l}$ și $\vec{n_p}$ cosinusul unghiului dintre ele.
 
-Since $D_p$ becomes increasingly too small as $\vec{n_l}$ and $\vec{n_p}$ become more perpendicular, we can use $\vec{n_l} \cdot \vec{n_p}$ as a denominator for $D_p$. We'll assign this scaled-up version of $D_p$ to $D$:
+Pentru doi vectori, cosinusul unghiurilor lor se apropie de 1 pe măsură ce vectorii devin din ce în ce mai paraleli și se apropie de 0 pe măsură ce devin perpendiculare.
+
+Deoarece $D_p$ devine din ce în ce mai mic pe măsură ce $\vec{n_l}$ și $\vec{n_p}$ devin tot mai perpendiculare, putem folosi $\vec{n_l} \cdot \vec{n_p}$ ca un numitor pentru $D_p$. Vom atribui această versiune scalată a lui $D_p$ lui $D$:
 
 <p className="mathblock">$$ D = \dfrac{D_p}{\vec{n_l} \cdot \vec{n_p}} $$</p>
 
-With $D$ as our scaled-up distance, we find the point of intersection $P$ via:
+Cu $D$ ca distanță scalată, găsim punctul de intersecție $P$ prin:
 
 <p className="mathblock">$$ P = p_l + \vec{n_l} \times D $$</p>
 
 <Scene scene="project-point-onto-plane-3" height={450} yOffset={-1} zoom={1.5} usesVariables />
 
-We can now get rid of $D_p$, which was defined as $d_p - (\vec{n_p} \cdot p_l)$, giving us the full equation for $D$:
+Acum putem elimina $D_p$, care a fost definit ca $d_p - (\vec{n_p} \cdot p_l)$, obținând astfel ecuația completă pentru $D$:
 
 <p className="mathblock">$$ D = \dfrac{d_p - (\vec{n_p} \cdot p_l)}{\vec{n_l} \cdot \vec{n_p}} $$</p>
 
-Putting this into code, we get:
+Introducând acest lucru în cod, obținem:
 
 ```cs
 Vector3 LinePlaneIntersection(Line line, Plane plane) {
@@ -223,32 +225,32 @@ Vector3 LinePlaneIntersection(Line line, Plane plane) {
 }
 ```
 
-However, our code is not complete yet. In the case where the line is parallel to the plane's surface, the line and plane do not intersect.
+Totuși, codul nostru nu este complet încă. În cazul în care linia este paralelă cu suprafața planului, linia și planul nu se intersectează.
 
 <Scene scene="project-point-onto-plane-4" height={450} yOffset={-1} zoom={1.5} autoRotate />
 
-That happens when $\vec{n_l}$ and $\vec{n_p}$ are perpendicular, in which case their dot product is zero. So if $\vec{n_l} \cdot \vec{n_p} = 0$, the line and plane do not intersect. This gives us an easy test we can add to our code to yield a result of "no intersection".
+Acest lucru se întâmplă atunci când $\vec{n_l}$ și $\vec{n_p}$ sunt perpendiculare, caz în care produsul lor scalar este zero. Așadar, dacă $\vec{n_l} \cdot \vec{n_p} = 0$, linia și planul nu se intersectează. Acest lucru ne oferă un test ușor pe care îl putem adăuga în codul nostru pentru a returna un rezultat de "fără intersecție".
 
-However, for many applications we'll want to treat being _almost_ parallel as actually being parallel. To do that, we can check whether the dot product is smaller than some very small number—customarily called epsilon
+Totuși, pentru multe aplicații, vom dori să tratăm cazurile în care linia este aproape paralelă ca fiind efectiv paralelă. Pentru a face acest lucru, putem verifica dacă produsul scalar este mai mic decât o valoare foarte mică—de obicei numită epsilon.
 
 ```cs
 float denom = Vector3.Dot(line.normal, plane.normal);
 if (Mathf.Abs(denom) < EPSILON) {
-    return null; // Line is parallel to plane's surface
+    return null; // Linia este paralelă cu suprafața planului
 }
 ```
 
-<SmallNote label="" center>See if you can figure out why Mathf.Abs is used here. We'll cover it later, so you'll see if you're right.</SmallNote>
+<SmallNote label="" center>Vezi dacă poți înțelege de ce este folosit Mathf.Abs aici. Vom discuta despre asta mai târziu, așa că vei vedea dacă ai dreptate.</SmallNote>
 
-We'll take a look at how to select the value of epsilon in a later chapter on two plane intersections.
+Vom analiza cum să selectăm valoarea epsilon într-un capitol viitor despre intersecțiile a două planuri.
 
-With this, our line-plane intersection implementation becomes:
+Cu asta, implementarea noastră a intersecției linie-plan devine:
 
 ```cs
 Vector3 LinePlaneIntersection(Line line, Plane plane) {
   float denom = Vector3.Dot(line.normal, plane.normal);
   if (Mathf.Abs(denom) < EPSILON) {
-      return null; // Line is parallel to plane's surface
+      return null; // Linia este paralelă cu suprafața planului
   }
 
   float dist = Vector3.Dot(plane.normal, line.point);
@@ -258,25 +260,25 @@ Vector3 LinePlaneIntersection(Line line, Plane plane) {
 ```
 
 
-### Rays and lines
+### Razele și liniile
 
-We've been talking about line-plane intersections, but I've been lying a bit by visualizing ray-plane intersections instead for visual clarity.
+Am vorbit despre intersecțiile linie-plan, dar am mințit puțin, vizualizând în schimb intersecțiile rază-plan pentru claritate vizuală.
 
 <Scene scene="project-point-onto-plane" height={450} yOffset={-1} zoom={1.5} usesVariables />
 
-A ray and a line are very similar; they're both represented through a normal $\vec{n_l}$ and a point $p_l$.
+O rază și o linie sunt foarte asemănătoare; amândouă sunt reprezentate printr-o normală $\vec{n_l}$ și un punct $p_l$.
 
-The difference is that a ray (colored red) extends in the direction of $\vec{n_l}$ away from $p_l$, while a line (colored green) extends in the other direction as well:
+Diferența este că o rază (colorată roșu) se extinde în direcția lui $\vec{n_l}$ de la $p_l$, în timp ce o linie (colorată verde) se extinde și în cealaltă direcție:
 
 <Scene scene="ray-and-line" height={450} yOffset={-1} zoom={1.5} usesVariables />
 
-What this means for intersections is that a ray will not intersect planes when traveling backward along its normal:
+Ceea ce înseamnă acest lucru pentru intersecții este că o rază nu va intersecta planurile atunci când călătorește înapoi pe direcția normală a sa:
 
 <Scene scene="ray-and-line-plane-intersection" height={450} yOffset={-1} zoom={1.5} usesVariables />
 
-Our implementation for ray-plane intersections will differ from our existing line-plane intersection implementation only in that it should yield a result of "no intersection" when the ray's normal $\vec{n_l}$ is pointing "away" from the plane's normal $\vec{n_p}$ at an obtuse angle.
+Implementarea noastră pentru intersecțiile rază-plan va diferi de implementarea existentă a intersecțiilor linie-plan doar prin faptul că ar trebui să returneze un rezultat de "fără intersecție" atunci când normală razei $\vec{n_l}$ este orientată "departe" de normală planului $\vec{n_p}$ la un unghi obtuz.
 
-Since $D$ represents how far to travel along the normal to reach the point of intersection, we could yield "no intersection" when $D$ becomes negative:
+Deoarece $D$ reprezintă distanța până la punctul de intersecție pe direcția normală, am putea returna "fără intersecție" atunci când $D$ devine negativ:
 
 ```cs
 if (D < 0) {
@@ -284,11 +286,12 @@ if (D < 0) {
 }
 ```
 
-But then we'd have to calculate $D$ first. That's not necessary since $D$ becomes negative as a consequence of the dot product $\vec{n_l} \cdot \vec{n_p}$ being a negative number when $\vec{n_l}$ and $\vec{n_p}$ are at an obtuse angle between 90° and 180°.
 
-<SmallNote label="">If this feels non-obvious, it helps to remember that the dot product encodes the cosine of the angle between its two component vectors, which is why the dot product becomes negative for obtuse angles.</SmallNote>
+Dar atunci ar trebui să calculăm mai întâi $D$. Acest lucru nu este necesar, deoarece $D$ devine negativ ca urmare a faptului că produsul scalar $\vec{n_l} \cdot \vec{n_p}$ este un număr negativ atunci când $\vec{n_l}$ și $\vec{n_p}$ sunt la un unghi obtuz între 90° și 180°.
 
-Knowing that, we can change our initial "parallel normals" test from this:
+<SmallNote label="">Dacă acest lucru nu este evident, este util să ne amintim că produsul scalar encodează cosinusul unghiului dintre cei doi vectori, motiv pentru care produsul scalar devine negativ pentru unghiuri obtuze.</SmallNote>
+
+Știind acest lucru, putem modifica testul nostru inițial pentru "normale paralele" din aceasta:
 
 ```cs
 Vector3 LinePlaneIntersection(Line line, Plane plane) {
@@ -300,13 +303,13 @@ Vector3 LinePlaneIntersection(Line line, Plane plane) {
 }
 ```
 
-To this:
+In aceasta:
 
 ```cs
 Vector3 RayPlaneIntersection(Line line, Plane plane) {
   float denom = Vector3.Dot(line.normal, plane.normal);
   if (denom < EPSILON) {
-    // Ray is parallel to plane's surface or pointing away from it
+    // Raza este paralelă cu suprafața planului sau se îndreaptă departe de aceasta
     return null;
   }
   // ...
