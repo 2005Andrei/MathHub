@@ -662,102 +662,102 @@ Cel de-al doilea vector poate fi găsit prin ecuația:
 
 unde $d_2$ și $d_3$ sunt distanțele în forma constantă-normală ale planelelor $P_2$ și $P_3$.
 
-With $\vec{v_1}$ and $\vec{v_2}$ defined, we assign their cross product to $\vec{V}$:
+Cu $\vec{v_1}$ și $\vec{v_2}$ definite, atribuim produsul lor încrucișat lui $\vec{V}$:
 
 <p className="mathblock">$$ \vec{V} = \vec{v_1} × \vec{v_2} $$</p>
 
-Let's see what it looks like:
+Hai să vedem cum arată:
 
 <Scene scene="three-intersecting-planes-3" height={450} zoom={1.25} yOffset={-0.5} autoRotate />
 
-Hmm, not quite long enough. $\vec{V}$ certainly points in the right direction, but to make $\vec{V}$'s tip lie on the line of intersection, we need to compute some scaling factor for $\vec{V}$.
+Hmm, nu este suficient de lung. $\vec{V}$ indică cu siguranță direcția corectă, dar pentru a face vârful lui $\vec{V}$ să se afle pe linia de intersecție, trebuie să calculăm un factor de scalare pentru $\vec{V}$.
 
-As it turns out, we've already computed this scaling factor:
+După cum se dovedește, am calculat deja acest factor de scalare:
 
 <p className="mathblock">$$\vec{n_1} \cdot (\vec{n_2} × \vec{n_3})$$</p>
 
-The product of $\vec{n_1} \cdot (\vec{n_2} × \vec{n_3})$—let's call that $D$—can be thought to represent how parallel $\vec{P_1}$'s normal is to the line intersection of $P_2$ and $P_3$.
+Produsul $\vec{n_1} \cdot (\vec{n_2} × \vec{n_3})$—să-l numim $D$—poate fi considerat ca reprezentând cât de paralel este normalul lui $\vec{P_1}$ față de linia de intersecție a lui $P_2$ și $P_3$.
 
-$D$ approaches $\|\vec{n_2} × \vec{n_3}\|$ as $P_1$'s normal becomes parallel to the line of intersection $\vec{n_2} × \vec{n_3}$, and approaches 0 as they become perpendicular.
+$D$ se apropie de $|\vec{n_2} × \vec{n_3}|$ pe măsură ce normalul lui $P_1$ devine paralel cu linia de intersecție $\vec{n_2} × \vec{n_3}$ și se apropie de 0 pe măsură ce devin perpendiculare.
 
-We want the $\vec{V}$'s magnitude to increase as $D$ decreases, so we'll make $\dfrac{1}{D}$ the scaling factor for $\vec{V}$.
+Dorim ca magnitudinea lui $\vec{V}$ să crească pe măsură ce $D$ scade, așa că vom face $\dfrac{1}{D}$ factorul de scalare pentru $\vec{V}$.
 
 <p className="mathblock">$$\vec{V} = \dfrac{\vec{v_1} × \vec{v_2}}{D}$$</p>
 
 <Scene scene="three-intersecting-planes-4" height={450} zoom={1.25} yOffset={-0.5} autoRotate />
 
-Fully expanded, the equation for $\vec{V}$ becomes:
+Complet extins, ecuația pentru $\vec{V}$ devine:
 
 <p className="mathblock">$$\vec{V} = \dfrac{\vec{v_1} × \vec{v_2}}{D} = \dfrac{\vec{n_1} × ((\vec{n_2} \times d_3) - (\vec{n_3} \times d_2))}{\vec{n_1} \cdot (\vec{n_2} × \vec{n_3})}$$</p>
 
-Bam! The problem is now reduced to traveling along the direction of the line intersection until we intersect with $P_1$.
+Bam! Problema este acum redusă la a călători de-a lungul direcției liniei de intersecție până când intersectăm cu $P_1$.
 
 <Scene scene="three-intersecting-planes-5" height={450} zoom={1.25} yOffset={-0.5} autoRotate />
 
-We could use our knowledge of line-plane intersections to solve this, but there is a more efficient approach I want to demonstrate.
+Am putea folosi cunoștințele noastre despre intersecțiile linie-plan pentru a rezolva asta, dar există o abordare mai eficientă pe care vreau să o demonstrez.
 
-It involves finding a scaling factor for the direction vector $\vec{n_2} × \vec{n_3}$ that scales it such that it's tip ends at $P_1$. Let's call this direction vector $\vec{U}$.
+Este vorba despre găsirea unui factor de scalare pentru vectorul de direcție $\vec{n_2} × \vec{n_3}$ care să-l scaleze astfel încât vârful său să ajungă la $P_1$. Să numim acest vector de direcție $\vec{U}$.
 
-There's one observation we can make that simplifies that. Since $\vec{V}$ is perpendicular to $P_1$'s normal, the distance from $\vec{V}$'s tip to $P_1$ along the direction vector $\vec{U}$ is the same as the distance from the origin to $P_1$ along that same direction.
+Există o observație pe care o putem face și care simplifică acest lucru. Deoarece $\vec{V}$ este perpendicular pe normalul lui $P_1$, distanța de la vârful lui $\vec{V}$ la $P_1$ pe direcția vectorului $\vec{U}$ este aceeași cu distanța de la origine la $P_1$ pe aceeași direcție.
 
 <Scene scene="three-intersecting-planes-6" height={450} zoom={1.25} yOffset={-0.5} autoRotate />
 
-With that, consider the vector $\vec{n_1} \times d_1$ where $\vec{n_1}$ and $d_1$ are the normal and distance of $P_1$.
+În acest context, să considerăm vectorul $\vec{n_1} \times d_1$, unde $\vec{n_1}$ și $d_1$ sunt normalul și distanța lui $P_1$.
 
 <Scene scene="three-intersecting-planes-7" height={450} zoom={1.25} yOffset={-0.5} autoRotate />
 
-If $\vec{n_1}$ were parallel to $\vec{U}$, then $d_1$ would be the scaling factor we need, but let's see what happens with $\vec{U} \times d_1$:
+Dacă $\vec{n_1}$ ar fi paralel cu $\vec{U}$, atunci $d_1$ ar fi factorul de scalare de care avem nevoie, dar să vedem ce se întâmplă cu $\vec{U} \times d_1$:
 
 <Scene scene="three-intersecting-planes-8" height={450} zoom={1.25} yOffset={-0.5} xRotation={-17} usesVariables />
 
-As $\vec{n_1}$ and $\vec{U}$ become less parallel, $U \times d_1$ becomes increasingly too short.
+Pe măsură ce $\vec{n_1}$ și $\vec{U}$ devin din ce în ce mai puțin paralele, $\vec{U} \times d_1$ devine din ce în ce mai scurt.
 
-One thing to note as well is that even when $\vec{n_1}$ and $\vec{U}$ are completely parallel, $\vec{U} \times d_1$ is still too short, which is due to $\vec{U}$ not being a unit vector. If we normalize $\vec{U}$ prior to multiplying with $d_1$ that problem goes away.
+Un lucru de menționat este că, chiar și atunci când $\vec{n_1}$ și $\vec{U}$ sunt complet paralele, $\vec{U} \times d_1$ este tot prea scurt, iar acest lucru se datorează faptului că $\vec{U}$ nu este un vector unitate. Dacă normalizăm $\vec{U}$ înainte de a-l înmulți cu $d_1$, problema dispare.
 
 <Scene scene="three-intersecting-planes-11" height={450} zoom={1.25} yOffset={-0.5} xRotation={-17} usesVariables />
 
-But we're getting ahead of ourselves—we won't need to normalize $\vec{U}$. Let's take a fresh look at how $D$ is defined:
+Dar ne grăbim puțin — nu va trebui să normalizăm $\vec{U}$. Haideți să privim din nou cum este definit $D$:
 
 <p className="mathblock">$$D = \vec{n_1} \cdot (\vec{n_2} × \vec{n_3})$$</p>
 
-Having defined $\vec{U}$ as $\vec{n_2} × \vec{n_3}$, we can simplify this to
+Având definit $\vec{U}$ ca fiind $\vec{n_2} × \vec{n_3}$, putem simplifica aceasta la
 
 <p className="mathblock">$$D = \vec{n_1} \cdot \vec{U}$$</p>
 
-Earlier I mentioned that we could think of $D$ as a measure of how parallel $P_1$'s normal $n_1$ is to $\vec{U}$ (the line intersection of $P_2$ and $P_3$). That's correct, but it's not the whole truth!
+Mai devreme am menționat că am putea considera $D$ ca o măsură a cât de paralel este normalul lui $P_1$, $\vec{n_1}$, cu $\vec{U}$ (linia de intersecție a lui $P_2$ și $P_3$). Asta este corect, dar nu este întreaga poveste!
 
-Since the dot product is a multiple of the magnitudes of its component vectors, $D$ also encodes the magnitude of $\vec{U}$. Hence, scaling $\vec{U}$ by $\dfrac{1}{D}$ does two things:
+Deoarece produsul scalar este un multiplu al magnitudinilor vectorilor săi componenti, $D$ înregistrează și magnitudinea lui $\vec{U}$. Astfel, scalarea lui $\vec{U}$ cu $\dfrac{1}{D}$ face două lucruri:
 
- 1. it normalizes $\vec{U}$, and
- 2. it increases the length of $\vec{U}$ as it becomes less parallel with $n_1$.
+1. Normalizează $\vec{U}$, și
+2. Crește lungimea lui $\vec{U}$ pe măsură ce devine mai puțin paralel cu $\vec{n_1}$.
 
-So $\dfrac{1}{D}$ is both the scaling factor we need for $\vec{U} \times d_1$, as well as $\vec{V}$:
+Așadar, $\dfrac{1}{D}$ este atât factorul de scalare de care avem nevoie pentru $\vec{U} \times d_1$, cât și pentru $\vec{V}$:
 
 <Scene scene="three-intersecting-planes-9" height={450} zoom={1.25} yOffset={-0.5} xRotation={-17} usesVariables />
 
-We've got our solution! Let's do a quick overview.
+Am obținut soluția! Să facem o revizuire rapidă.
 
-We define $\vec{V}$ as:
+Definim $\vec{V}$ ca:
 
 <p className="mathblock">$$\vec{V} = \vec{n_1} × ((\vec{n_2} \times d_3) - (\vec{n_3} \times d_2))$$</p>
 
-We'll redefine $\vec{U}$ to include $d_1$:
+Vom redefini $\vec{U}$ pentru a include și $d_1$:
 
 <p className="mathblock">$$\vec{U} = (\vec{n_2} × \vec{n_3}) \times d_1$$</p>
 
-Our denominator, $D$, remains defined as :
+Desigur! Așadar, numitorul nostru, $D$, rămâne definit ca:
 
 <p className="mathblock">$$D = \vec{n_1} \cdot (\vec{n_2} × \vec{n_3})$$</p>
 
-With this, we find our point of intersection $P$ by adding $\vec{V}$ and $\vec{U}$ together and scaling them by $\dfrac{1}{D}$:
+Cu aceasta, găsim punctul nostru de intersecție $P$ adunând $\vec{V}$ și $\vec{U}$ și scalându-le cu $\dfrac{1}{D}$:
 
 <p className="mathblock">$$P = \dfrac{\vec{V} + \vec{U}}{D}$$</p>
 
-Which fully expanded becomes:
+Care, complet extins, devine:
 
 <p className="mathblock">$$P = \dfrac{(\vec{n_1} × ((\vec{n_2} \times d_3) - (\vec{n_3} \times d_2))) + ((\vec{n_2} × \vec{n_3}) \cdot d_1)}{\vec{n_1} \cdot (\vec{n_2} × \vec{n_3})}$$</p>
 
-Putting this into code, we get:
+Punând aceasta în cod, obținem:
 
 ```cs
 Vector3 ThreePlaneIntersection(Plane P1, Plane P2, Plane P3) {
@@ -765,7 +765,7 @@ Vector3 ThreePlaneIntersection(Plane P1, Plane P2, Plane P3) {
   
   float denom = Vector3.Dot(u);
   if (Mathf.Abs(denom) < EPSILON) {
-    return null; // Planes do not intersect at a single point
+    return null; // Planele nu se intersectează într-un singur punct.
   }
 
   Vector3 a = P2.normal * P3.distance;
