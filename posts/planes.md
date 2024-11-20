@@ -1,6 +1,6 @@
 ---
-title: "Planes in 3D space"
-description: "Visual and interactive introduction to 2D planes in 3D space."
+title: "Planele în spațiul 3D"
+description: "Introducere vizuală și interactivă în planurile 2D din spațiul 3D."
 image: "/images/og-planes.png"
 publishedAt: "2024-11-19"
 tags: ["Algebra geometrica", "Interactiv", "Vectori"]
