@@ -6,7 +6,7 @@ publishedAt: "2024-11-19"
 tags: ["Algebra geometrica", "Interactiv", "Vectori"]
 ---
 
-Un plan in 3D poate fi vazut caa o suprafata infinita, impartind spatiul in dou jumatati.
+Un plan in 3D poate fi vazut ca o suprafata infinita, impartind spatiul in dou jumatati.
 
 <Scene autoRotate scene="what-is-a-plane" height={480} yOffset={-0.5} zoom={1.2} angle={10} usesVariables />
 
