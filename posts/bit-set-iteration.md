@@ -897,4 +897,4 @@ Anyway, thanks for reading this short series on bit set! If you haven't read par
 
 I may write a part 3, taking an in-depth look at bit set performance for boolean operations (and, or, xor, andNot, etc), but I've thought about bit sets quite enough for now.
 
-— MathHub
+— Mathub

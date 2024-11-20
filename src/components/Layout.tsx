@@ -20,7 +20,7 @@ export const Layout = (props: Props) => {
         <div className={s("headerContent")}>
           <div className={s("headerSection")}>
             <Link href="/" className={s("link", { home: true })}>
-              MathHub
+              Mathub
             </Link>
           </div>
           <div className={s("headerSection")}>

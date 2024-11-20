@@ -360,4 +360,4 @@ Until recently, I wasn't aware of the `-S` option, and neither was a colleague I
 
 I've used the `-S` option a few times since discovering it, and it's made searching for commits much more enjoyable. Go ahead and try the `-S` option the next time you need to search a commit history. I hope it proves useful!
 
-<EmDash /> MathHub
+<EmDash /> Mathub

@@ -611,7 +611,7 @@ Next up in our bit set journey is iterating over bits. We'll learn how exploitin
 
 See you in part 2: <a href="/blog/bit-sets-fast-foreach" target="_blank">Iterating over Bit Sets quickly</a>
 
-— MathHub
+— Mathub
 
 [alexharri_bitset]: https://github.com/alexharri/bitset-mut
 [twos_complement]: https://en.wikipedia.org/wiki/Two%27s_complement

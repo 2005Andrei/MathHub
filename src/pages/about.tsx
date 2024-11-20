@@ -155,12 +155,12 @@ export default function Page() {
   return (
     <Layout>
       <Head>
-        <title>About me | MathHub Jónsson</title>
+        <title>About me | Mathub Jónsson</title>
       </Head>
       <h1 className={s("headline")}>About me</h1>
       <PostLayout>
         <p>
-          Hey, I'm MathHub. I write about software engineering topics like TypeScript,
+          Hey, I'm Mathub. I write about software engineering topics like TypeScript,
           performance, and mathematics. <Link href="/blog">View blog</Link>.
         </p>
         {SHOW_IMAGE_CAROUSEL && (

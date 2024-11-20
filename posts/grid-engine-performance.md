@@ -276,7 +276,7 @@ As an example, the change from static properties to getters creates a worst-case
 
 Anyway, I hope this served as an interesting read. Maybe you got some ideas that you can apply to your own code!
 
-— MathHub
+— Mathub
 
 ---
 

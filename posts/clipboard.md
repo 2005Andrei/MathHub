@@ -609,7 +609,7 @@ I find the Web Custom Formats proposal promising, and I hope it becomes implemen
 
 Thanks for reading! I hope this was interesting.
 
-— MathHub
+— Mathub
 
 
 ## Appendix: the `unsanitized` option

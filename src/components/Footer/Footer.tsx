@@ -15,9 +15,9 @@ export const Footer = () => {
         <div className={s("grid")}>
           <section>
             <p className={s("title")}>
-              <a href="/">MathHub</a>
+              <a href="/">Mathub</a>
             </p>
-            <p className={s("copyright")}>© 2024 MathHub Jónsson</p>
+            <p className={s("copyright")}>© 2024 Mathub Jónsson</p>
           </section>
           <section>
             <p className={s("sectionTitle")}>Links</p>

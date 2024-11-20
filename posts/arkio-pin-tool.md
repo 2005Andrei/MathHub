@@ -67,4 +67,4 @@ We intend to share more details on the development process here on the community
 
 Anyway, thanks so much for reading. We hope the new Pin Tool in Arkio 1.7 is of use to you and your team!
 
-— MathHub, Senior Software Engineer at Arkio
+— Mathub, Senior Software Engineer at Arkio

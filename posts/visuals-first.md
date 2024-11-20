@@ -163,5 +163,5 @@ I've found the release comics to aid other people's understanding of my work, an
 
 Sharing changes visually will fit some projects and roles better than others. Still, see if you don't find an opportunity to present your work visually!
 
-<EmDash /> MathHub
+<EmDash /> Mathub
 
